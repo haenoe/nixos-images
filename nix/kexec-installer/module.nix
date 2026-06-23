@@ -33,6 +33,12 @@ in
   };
 
   config = {
+    hardware = {
+      enableAllFirmware = true;
+      enableAllHardware = true;
+      enableRedistributableFirmware = true;
+    };
+
     boot.initrd.compressor = "xz";
     networking.networkmanager.enable = lib.mkForce false;
     # This is a variant of the upstream kexecScript that also allows embedding
