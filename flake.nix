@@ -17,7 +17,11 @@
         let
           pkgs = nixos-unstable.legacyPackages.${system};
           netboot = nixpkgs: (import (nixpkgs + "/nixos/release.nix") { }).netboot.${system};
-          kexec-installer = nixpkgs: module: (nixpkgs.legacyPackages.${system}.nixos [ module self.nixosModules.kexec-installer ]).config.system.build.kexecInstallerTarball;
+          kexec-installer = nixpkgs: module:
+            let
+              pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
+            in
+            (pkgs.nixos [ module self.nixosModules.kexec-installer ]).config.system.build.kexecInstallerTarball;
           netboot-installer = nixpkgs: (nixpkgs.legacyPackages.${system}.nixos [ self.nixosModules.netboot-installer ]).config.system.build.netboot;
           image-installer = nixpkgs: (nixpkgs.legacyPackages.${system}.nixos [ self.nixosModules.image-installer ]).config.system.build.isoImage;
         in
